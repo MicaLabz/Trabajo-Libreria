@@ -29,13 +29,18 @@ public class LibroServicio {
 	private AutorRepositorio autorRepositorio;
 	
 	@Transactional
-	public void ingresarLibro(Long isbn, String titulo, Integer anio, Integer ejemplares, Integer ejemplaresPrestados, Integer ejemplaresRestantes, Boolean alta, String idAutor, String idEditorial) throws ErrorServicio {
+	public Libro ingresarLibro(Long isbn, String titulo, Integer anio, Integer ejemplares, Integer ejemplaresPrestados, Integer ejemplaresRestantes, String idAutor, String idEditorial) throws Exception {
 		if(titulo == null || titulo.isEmpty()) {
 			throw new ErrorServicio("Titulo del Libro es null");
 		}
-		Editorial editorial = editorialRepositorio.findById(idEditorial).get(); 
-		Autor autor = autorRepositorio.findById(idAutor).get();
+		Optional <Editorial> result = editorialRepositorio.findById(idEditorial);
+		Optional <Autor> result1 = autorRepositorio.findById(idAutor);
 		
+		if(result.isEmpty() || result1.isEmpty()) {
+			throw new Exception("No se encontro data");
+		}else {
+		Editorial editorial = result.get();
+		Autor autor = result1.get();
 		Libro libro = new Libro();
 		libro.setIsbn(isbn);
 		libro.setTitulo(titulo);
@@ -43,61 +48,72 @@ public class LibroServicio {
 		libro.setEjemplares(ejemplares);
 		libro.setEjemplaresPrestados(ejemplaresPrestados);
 		libro.setEjemplaresRestantes(ejemplaresRestantes);
-		libro.setAlta(alta);
+		libro.setAlta(true);
 		libro.setAutor(autor);
 		libro.setEditorial(editorial);
 		
-		libroRepositorio.save(libro);
-		
+		return libroRepositorio.save(libro);
+	}
 	}
 	
 	@Transactional
-	public void modificarLibro(String id, Long isbn, String titulo, Integer anio, Integer ejemplares, Integer ejemplaresPrestados, Integer ejemplaresRestantes, Boolean alta, String idAutor, String idEditorial ) throws ErrorServicio {
-		if(titulo == null || titulo.isEmpty()) {
-			throw new ErrorServicio("Titulo del Libro es null");
-		}
-		Editorial editorial = editorialRepositorio.findById(idEditorial).get(); 
-		Autor autor = autorRepositorio.findById(idAutor).get();
-
-		Optional<Libro> respuesta = libroRepositorio.findById(id);
-		if (respuesta.isPresent()) {
-			Libro libro = respuesta.get();
+	public Libro modificarLibro(String id, Long isbn, String titulo, Integer anio, Integer ejemplares, Integer ejemplaresPrestados, Integer ejemplaresRestantes, String idAutor, String idEditorial ) throws Exception {
+		
+		Optional <Editorial> result = editorialRepositorio.findById(idEditorial);
+		Optional <Autor> result1 = autorRepositorio.findById(idAutor);
+		Optional<Libro> result2 = libroRepositorio.findById(id);
+		
+		if (result.isEmpty() || result1.isEmpty() || result2.isEmpty()) {
+			throw new Exception("Datos no estan");
+		}else {	
+			Editorial editorial = result.get();
+			Autor autor = result1.get();
+			Libro libro = result2.get();
 			libro.setIsbn(isbn);
 			libro.setTitulo(titulo);
 			libro.setAnio(anio);
 			libro.setEjemplares(ejemplares);
 			libro.setEjemplaresPrestados(ejemplaresPrestados);
 			libro.setEjemplaresRestantes(ejemplaresRestantes);
-			libro.setAlta(alta);
 			libro.setAutor(autor);
 			libro.setEditorial(editorial);
 
-			libroRepositorio.save(libro);
-		} else {
-			throw new ErrorServicio ("No se encontro el Libro buscado");
+			return libroRepositorio.save(libro);
 
 		}
 
 	}
 
+
 	@Transactional
-	public void darBajaLibro(String id) throws ErrorServicio {
+	public void darBajaLibro(String id) throws Exception {
 		Optional<Libro> respuesta = libroRepositorio.findById(id);
-		if (respuesta.isPresent()) {
+		if (respuesta.isEmpty()) {
+			throw new Exception("No se encontro");
+		}else {
 			Libro libro = respuesta.get();
 			libro.setAlta(false);
-
-			libroRepositorio.save(libro);
-		} else {
-			throw new ErrorServicio("No se encontro el Libro buscado");
-		}
-
+            libroRepositorio.save(libro);
+            libroRepositorio.delete(libro);
+	}
 	}
 	
 	@Transactional
 	public List<Libro> buscarLibros() {
 		return libroRepositorio.findAll();
 		
+	}
+	
+	@Transactional
+	public Libro obtenerLibro(String id) throws Exception{
+		Optional<Libro> result = libroRepositorio.findById(id);
+	       
+	    if(result.isEmpty()) {
+	    	throw new Exception("No se encontro");
+	    }else {
+		Libro libro = result.get();
+		return libro;
+	}
 	}
 
 }

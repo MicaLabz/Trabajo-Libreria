@@ -76,4 +76,15 @@ public class EditorialServicio {
 		return editorial;
 	}
 	}
+	
+	public Editorial obtenerEditorialPorNombre(String nombre) throws Exception {
+		Optional<Editorial> result = editorialRepositorio.buscarPorNombre(nombre);
+	       
+	    if(result.isEmpty()) {
+	    	throw new Exception("No se encontro");
+	    }else {
+		Editorial editorial = result.get();
+		return editorial;
+	}
+}
 }

@@ -73,6 +73,17 @@ public class AutorServicio {
 		Autor autor = result.get();
 		return autor;
 	}
+	}
+	    
+	public Autor obtenerAutorPorNombre(String nombre) throws Exception {
+		Optional<Autor> result = autorRepositorio.buscarPorNombre(nombre);
+	       
+	    if(result.isEmpty()) {
+	    	throw new Exception("No se encontro");
+	    }else {
+		Autor autor = result.get();
+		return autor;
+	}
 	
 }
 }

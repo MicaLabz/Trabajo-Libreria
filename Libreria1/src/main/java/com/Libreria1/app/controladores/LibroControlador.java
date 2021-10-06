@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.Libreria1.app.entidades.Autor;
+import com.Libreria1.app.entidades.Editorial;
 import com.Libreria1.app.entidades.Libro;
+import com.Libreria1.app.repositorios.LibroRepositorio;
 import com.Libreria1.app.servicios.AutorServicio;
+import com.Libreria1.app.servicios.EditorialServicio;
 import com.Libreria1.app.servicios.LibroServicio;
 
 @Controller
@@ -22,6 +25,12 @@ public class LibroControlador {
 	
         @Autowired	
         private LibroServicio libroServicio;
+        
+        @Autowired 
+        private AutorServicio autorServicio;
+        
+        @Autowired
+        private EditorialServicio editorialServicio;
 	
 		@GetMapping("/lista")
 		public String lista(ModelMap modelo){
@@ -30,55 +39,59 @@ public class LibroControlador {
 
 			modelo.addAttribute("libros", todosLibros);
 
-			return "lista-libros";
+			return "lista-libro";
 		}
 		
 		@GetMapping("/modificar/{id}")
 		public String modificar(ModelMap modelo, @PathVariable String id) {
 			try {
-			     Autor autor = autorServicio.obtenerAutor(id);
-			     modelo.addAttribute("autor",autor);
-			     return "modificar-autor";
+			     Libro libro = libroServicio.obtenerLibro(id);
+			     modelo.addAttribute("libro",libro);
+			     return "modificar-libro";
 			}catch(Exception e) {
 				modelo.put("error", "falta algun dato");
-				return "modificar-autor";
+				return "modificar-libro";
 			}
 		}
 		
 		
 		@PostMapping("/modificar/{id}")
-		public String modificar(ModelMap modelo, @PathVariable String id, @RequestParam String nombre) {
+		public String modificar(ModelMap modelo, @PathVariable String id, @RequestParam Long isbn, @RequestParam String titulo, @RequestParam Integer anio, @RequestParam Integer ejemplares, @RequestParam Integer ejemplaresPrestados, @RequestParam Integer ejemplaresRestantes,/*dudas*/ @RequestParam String idAutor, @RequestParam String idEditorial) {
 			try {
-			     autorServicio.modificarAutor(id, nombre);
-			     return "redirect:/autor/lista";
+			     libroServicio.modificarLibro(id, isbn, titulo, anio, ejemplares, ejemplaresPrestados, ejemplaresRestantes,/*dudas*/ idAutor, idEditorial);
+			     return "redirect:/libro/lista";
 			}catch(Exception e) {
 				 modelo.put("error", "Falta algun dato");
-				 return "modificar-autor";
+				 return "modificar-libro";
 			}
 		}
 
 		@GetMapping("/ingreso")
 		public String ingreso() {
-			return "ingreso-autor";
+			return "ingreso-libro";
 		}
 
 		@PostMapping("/ingreso")
-		public String ingresarAutor(ModelMap modelo, @RequestParam String nombre) {
+		public String ingresarLibro(ModelMap modelo, @RequestParam Long isbn, @RequestParam String titulo, @RequestParam Integer anio, @RequestParam Integer ejemplares, @RequestParam Integer ejemplaresPrestados, @RequestParam Integer ejemplaresRestantes,/*dudas*/ @RequestParam String nombre, @RequestParam String nombre1) {
 			try {
-			      autorServicio.ingresarAutor(nombre);
+				  Autor autor = autorServicio.obtenerAutorPorNombre(nombre);
+				  String idAutor = autor.getId();
+				  Editorial editorial = editorialServicio.obtenerEditorialPorNombre(nombre1);
+				  String idEditorial = editorial.getId();
+			      libroServicio.ingresarLibro(isbn, titulo, anio, ejemplares, ejemplaresPrestados, ejemplaresRestantes,/*dudas*/ idAutor, idEditorial);
 			      modelo.put("exito", "Ingreso exitoso!");
-			      return "redirect:/autor/lista";
+			      return "redirect:/libro/lista";
 			}catch(Exception e) {
 				  modelo.put("error", "Falta algun dato");
-				  return "ingreso-autor";
+				  return "ingreso-libro";
 			}
 		}
 
 		@GetMapping("/baja/{id}")
 		public String baja(@PathVariable String id) {
 			try {
-			     autorServicio.darBajaAutor(id);
-			     return "redirect:/autor/lista";
+			     libroServicio.darBajaLibro(id);
+			     return "redirect:/libro/lista";
 			
 		    }catch(Exception e) {
 			     return "redirect:/"; 

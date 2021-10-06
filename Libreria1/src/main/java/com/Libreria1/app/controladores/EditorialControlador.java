@@ -59,9 +59,9 @@ public class EditorialControlador {
 			}
 
 			@PostMapping("/ingreso")
-			public String ingresarEditorial(ModelMap modelo, @RequestParam String nombre) {
+			public String ingresarEditorial(ModelMap modelo, @RequestParam String nombre1) {
 				try {
-				      editorialServicio.ingresarEditorial(nombre);
+				      editorialServicio.ingresarEditorial(nombre1);
 				      modelo.put("exito", "Ingreso exitoso!");
 				      return "redirect:/editorial/lista";
 				}catch(Exception e) {
