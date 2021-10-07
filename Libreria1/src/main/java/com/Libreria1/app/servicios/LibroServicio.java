@@ -28,6 +28,12 @@ public class LibroServicio {
 	@Autowired
 	private AutorRepositorio autorRepositorio;
 	
+	@Autowired
+	private AutorServicio autorServicio;
+	
+	@Autowired
+	private EditorialServicio editorialServicio;
+	
 	@Transactional
 	public Libro ingresarLibro(Long isbn, String titulo, Integer anio, Integer ejemplares, Integer ejemplaresPrestados, Integer ejemplaresRestantes, String idAutor, String idEditorial) throws Exception {
 		if(titulo == null || titulo.isEmpty()) {
@@ -57,7 +63,7 @@ public class LibroServicio {
 	}
 	
 	@Transactional
-	public Libro modificarLibro(String id, Long isbn, String titulo, Integer anio, Integer ejemplares, Integer ejemplaresPrestados, Integer ejemplaresRestantes, String idAutor, String idEditorial ) throws Exception {
+	public Libro modificarLibro(String id, Long isbn, String titulo, Integer anio, Integer ejemplares, Integer ejemplaresPrestados, Integer ejemplaresRestantes, String idAutor, String nombre, String idEditorial, String nombre1 ) throws Exception {
 		
 		Optional <Editorial> result = editorialRepositorio.findById(idEditorial);
 		Optional <Autor> result1 = autorRepositorio.findById(idAutor);
@@ -67,7 +73,9 @@ public class LibroServicio {
 			throw new Exception("Datos no estan");
 		}else {	
 			Editorial editorial = result.get();
+			editorialServicio.modificarEditorial(idEditorial, nombre1);
 			Autor autor = result1.get();
+			autorServicio.modificarAutor(idAutor, nombre );
 			Libro libro = result2.get();
 			libro.setIsbn(isbn);
 			libro.setTitulo(titulo);

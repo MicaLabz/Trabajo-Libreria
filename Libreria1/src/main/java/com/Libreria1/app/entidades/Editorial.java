@@ -12,7 +12,7 @@ public class Editorial {
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid" , strategy = "uuid2")
 	private String id;
-	private String nombre;
+	public String nombre;
 	private Boolean alta;
 	
 	public Editorial(String id, String nombre, Boolean alta) {

@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
 <head>
     <meta charset="UTF-8">
     <meta hhtp-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modificacion de Editorialr</title>
+    <title>Modificacion de Libro</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
 	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
 
-    <h1>ACA SE MODIFICA LA EDITORIAL ELEGIDA</h1>
+    <h1>ACA SE MODIFICA EL LIBRO ELEGIDO</h1>
     
     <div class="container m-5">
 
@@ -27,12 +27,47 @@
 			</div>
 		</div>
 
-		<form th:action="@{/editorial/modificar/__${editorial.id}__}" method="POST">
+		<form th:action="@{/libro/modificar/__${libro.id}__}" method="POST">
 			
 			<div class="row">
 			    <div class="col">
+			        <input type="text" class="form-control" name="isbn"
+			            th:value="${libro.isbn}" required>
+			</div>
+			<div class="row">
+			    <div class="col">
+			        <input type="text" class="form-control" name="titulo"
+			            th:value="${libro.titulo}" required>
+			</div>
+			<div class="row">
+			    <div class="col">
+			        <input type="text" class="form-control" name="anio"
+			            th:value="${libro.anio}" required>
+			</div>
+			<div class="row">
+			    <div class="col">
+			        <input type="text" class="form-control" name="ejemplares"
+			            th:value="${libro.ejemplares}" required>
+			</div>
+			<div class="row">
+			    <div class="col">
+			        <input type="text" class="form-control" name="ejemplaresPrestados"
+			            th:value="${libro.ejemplaresPrestados}" required>
+			</div>
+			<div class="row">
+			    <div class="col">
+			        <input type="text" class="form-control" name="ejemplaresRestantes"
+			            th:value="${libro.ejemplaresRestantes}" required>
+			</div>
+			<div class="row">
+			    <div class="col">
 			        <input type="text" class="form-control" name="nombre"
-			            th:value="${editorial.nombre}" required>
+			            th:value="${libro.autor.nombre}" required>
+			</div>
+			<div class="row">
+			    <div class="col">
+			        <input type="text" class="form-control" name="nombre1"
+			            th:value="${libro.editorial.nombre}" required>
 			</div>
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</form>
@@ -40,7 +75,7 @@
 		<section class="py-5 text-center container">
 			<div class="row py-lg-5">
 				<div class="col-lg-6 col-md-8 mx-auto">
-					<a th:href="@{/editorial/lista}" class="btn btn-primary my-2">Volver</a>
+					<a th:href="@{/libro/lista}" class="btn btn-primary my-2">Volver</a>
 				</div>
 			</div>
 		</section>

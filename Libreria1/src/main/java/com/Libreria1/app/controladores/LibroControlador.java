@@ -56,9 +56,13 @@ public class LibroControlador {
 		
 		
 		@PostMapping("/modificar/{id}")
-		public String modificar(ModelMap modelo, @PathVariable String id, @RequestParam Long isbn, @RequestParam String titulo, @RequestParam Integer anio, @RequestParam Integer ejemplares, @RequestParam Integer ejemplaresPrestados, @RequestParam Integer ejemplaresRestantes,/*dudas*/ @RequestParam String idAutor, @RequestParam String idEditorial) {
+		public String modificar(ModelMap modelo, @PathVariable String id, @RequestParam Long isbn, @RequestParam String titulo, @RequestParam Integer anio, @RequestParam Integer ejemplares, @RequestParam Integer ejemplaresPrestados, @RequestParam Integer ejemplaresRestantes,/*dudas*/ @RequestParam String nombre, @RequestParam String nombre1) {
 			try {
-			     libroServicio.modificarLibro(id, isbn, titulo, anio, ejemplares, ejemplaresPrestados, ejemplaresRestantes,/*dudas*/ idAutor, idEditorial);
+				 Autor autor = autorServicio.obtenerAutorPorNombre(nombre);
+				 String idAutor = autor.getId();
+				 Editorial editorial = editorialServicio.obtenerEditorialPorNombre(nombre1);
+				 String idEditorial = editorial.getId();
+				 libroServicio.modificarLibro(id, isbn, titulo, anio, ejemplares, ejemplaresPrestados, ejemplaresRestantes,/*dudas*/ idAutor, nombre, idEditorial, nombre1);
 			     return "redirect:/libro/lista";
 			}catch(Exception e) {
 				 modelo.put("error", "Falta algun dato");

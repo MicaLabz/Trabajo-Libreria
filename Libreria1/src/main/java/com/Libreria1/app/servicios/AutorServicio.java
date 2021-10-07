@@ -7,14 +7,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mapping.AccessOptions.SetOptions.Propagation;
 import org.springframework.stereotype.Service;
 import com.Libreria1.app.entidades.Autor;
+import com.Libreria1.app.entidades.Libro;
 import com.Libreria1.app.errores.ErrorServicio;
 import com.Libreria1.app.repositorios.AutorRepositorio;
+import com.Libreria1.app.repositorios.LibroRepositorio;
 
 @Service
 public class AutorServicio {
 	
 	@Autowired
 	private AutorRepositorio autorRepositorio;
+	
+	@Autowired
+	private LibroRepositorio libroRepositorio;
+	
+	@Autowired
+	private LibroServicio libroServicio;
 	
 	@Transactional
 	public Autor ingresarAutor(String nombre) throws ErrorServicio {
@@ -47,14 +55,19 @@ public class AutorServicio {
 	@Transactional
 	public void darBajaAutor(String id) throws Exception {
 		Optional<Autor> result = autorRepositorio.findById(id);
+		Optional<Libro> result1 = libroRepositorio.buscarLibroPorIdAutor(id);
        
-	    if(result.isEmpty()) {
+	    if(result.isEmpty() || result1.isEmpty()) {
 	    	throw new Exception("No se encontro");
 	    }else {
 		Autor autor = result.get();
+		Libro libro = result1.get();
         autor.setAlta(false);
 		autorRepositorio.save(autor);
 		autorRepositorio.delete(autor);
+		libroRepositorio.save(libro);
+		libroRepositorio.delete(libro);
+		
 	}
 	}
 	

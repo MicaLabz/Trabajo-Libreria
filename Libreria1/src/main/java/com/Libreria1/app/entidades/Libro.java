@@ -11,7 +11,7 @@ public class Libro {
 	@Id
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid" , strategy = "uuid2")
-	private String id;
+	public String id;
 	private Long isbn;
     private String titulo;
     private Integer anio;
@@ -20,9 +20,9 @@ public class Libro {
     private Integer ejemplaresRestantes;
     private Boolean alta;
     @OneToOne
-    private Autor autor;
+    public Autor autor;
     @OneToOne
-    private Editorial editorial;
+    public Editorial editorial;
     
 	public Libro(String id, Long isbn, String titulo, Integer anio, Integer ejemplares, Integer ejemplaresPrestados,
 			Integer ejemplaresRestantes, Boolean alta, Autor autor, Editorial editorial) {

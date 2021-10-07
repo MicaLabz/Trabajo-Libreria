@@ -13,12 +13,16 @@ import com.Libreria1.app.entidades.Editorial;
 import com.Libreria1.app.entidades.Libro;
 import com.Libreria1.app.errores.ErrorServicio;
 import com.Libreria1.app.repositorios.EditorialRepositorio;
+import com.Libreria1.app.repositorios.LibroRepositorio;
 
 @Service
 public class EditorialServicio {
 	
 	@Autowired
 	private EditorialRepositorio editorialRepositorio;
+	
+	@Autowired
+	private LibroRepositorio libroRepositorio;
 	
 	@Transactional
 	public Editorial ingresarEditorial(String nombre) throws ErrorServicio{
@@ -49,14 +53,18 @@ public class EditorialServicio {
 	@Transactional
 	public void darBajaEditorial(String id) throws Exception {
 		Optional<Editorial> result = editorialRepositorio.findById(id);
+		Optional<Libro> result1 = libroRepositorio.buscarLibroPorIdEditorial(id);
 	       
-	    if(result.isEmpty()) {
+	    if(result.isEmpty() || result1.isEmpty()) {
 	    	throw new Exception("No se encontro");
 	    }else {
 		Editorial editorial = result.get();
+		Libro libro = result1.get();
         editorial.setAlta(false);
 		editorialRepositorio.save(editorial);
 		editorialRepositorio.delete(editorial);
+		libroRepositorio.save(libro);
+		libroRepositorio.delete(libro);
 	    }
 	}
 	

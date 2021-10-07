@@ -12,7 +12,7 @@ public class Autor {
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid" , strategy = "uuid2")
 	private String id;
-	private String nombre;
+	public String nombre;
 	private Boolean alta;
 	
 	public Autor(String id, String nombre, Boolean alta) {
