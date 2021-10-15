@@ -1,5 +1,6 @@
 package com.Libreria1.app.entidades;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -12,7 +13,8 @@ public class Autor {
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid" , strategy = "uuid2")
 	private String id;
-	public String nombre;
+	@Column(unique = true )
+	private String nombre;
 	private Boolean alta;
 	
 	public Autor(String id, String nombre, Boolean alta) {

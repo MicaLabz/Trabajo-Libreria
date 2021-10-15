@@ -15,5 +15,11 @@ import com.Libreria1.app.entidades.Editorial;
 public interface EditorialRepositorio extends JpaRepository<Editorial, String> {
 	
 	@Query("SELECT c FROM Editorial c where c.nombre = :nombre")
-	public Optional<Editorial> buscarPorNombre(@Param("nombre") String nombre);
+	public Optional<Editorial> buscarPorNombre1(@Param("nombre") String nombre);
+	
+	@Query("SELECT c FROM Autor c where c.nombre = :nombre")
+	public List<Editorial> buscarPorNombre(@Param("nombre") String nombre);
+	
+	@Query("SELECT a from Editorial a WHERE a.alta = true ")
+	public List<Editorial> buscarActivos();
 }

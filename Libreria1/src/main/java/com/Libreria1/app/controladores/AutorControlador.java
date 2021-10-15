@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.Libreria1.app.entidades.Autor;
 import com.Libreria1.app.servicios.AutorServicio;
+import com.Libreria1.app.servicios.LibroServicio;
 
 @Controller
 @RequestMapping("/autor")
@@ -20,6 +21,9 @@ public class AutorControlador {
 	
         @Autowired	
         private AutorServicio autorServicio;
+        
+        @Autowired
+        private LibroServicio libroServicio;
 	
 		@GetMapping("/lista")
 		public String lista(ModelMap modelo){
@@ -32,12 +36,13 @@ public class AutorControlador {
 		}
 		
 		@GetMapping("/modificar/{id}")
-		public String modificar(ModelMap modelo, @PathVariable String id) {
+		public String modificar(ModelMap modelo, @PathVariable String id) throws Exception {
 			try {
 			     Autor autor = autorServicio.obtenerAutor(id);
 			     modelo.addAttribute("autor",autor);
 			     return "modificar-autor";
 			}catch(Exception e) {
+				System.out.println(e.getMessage());
 				modelo.put("error", "falta algun dato");
 				return "modificar-autor";
 			}
@@ -45,14 +50,19 @@ public class AutorControlador {
 		
 		
 		@PostMapping("/modificar/{id}")
-		public String modificar(ModelMap modelo, @PathVariable String id, @RequestParam String nombre) {
+		public String modificar(ModelMap modelo, @PathVariable String id, @RequestParam String nombre) throws Exception {
 			try {
 			     autorServicio.modificarAutor(id, nombre);
+			     modelo.put("exito", "Ingreso exitoso!");
 			     return "redirect:/autor/lista";
 			}catch(Exception e) {
-				 modelo.put("error", "Falta algun dato");
-				 return "modificar-autor";
+				 System.out.println(e.getMessage());
+				 e.printStackTrace();
+				 System.out.println("error10");
+				 modelo.addAttribute("error", e.getMessage());
+				 //throw new Exception("Falta algun dato o no puede ingresar un Autor con igual nombre a otro");
 			}
+			return "redirect:/autor/lista";
 		}
 
 		@GetMapping("/ingreso")
@@ -61,13 +71,15 @@ public class AutorControlador {
 		}
 
 		@PostMapping("/ingreso")
-		public String ingresarAutor(ModelMap modelo, @RequestParam String nombre) {
+		public String ingresarAutor(ModelMap modelo, @RequestParam String nombre) throws Exception  {
 			try {
 			      autorServicio.ingresarAutor(nombre);
 			      modelo.put("exito", "Ingreso exitoso!");
 			      return "redirect:/autor/lista";
 			}catch(Exception e) {
-				  modelo.put("error", "Falta algun dato");
+                  System.out.println(e.getMessage());
+                  System.out.println(e.getStackTrace());
+				  modelo.put("error", "Falta algun dato o no puede ingresar un Autor con igual nombre a otro");
 				  return "ingreso-autor";
 			}
 		}
@@ -79,8 +91,35 @@ public class AutorControlador {
 			     return "redirect:/autor/lista";
 			
 		    }catch(Exception e) {
-			     return "redirect:/"; 
+		    	System.out.println(e.getMessage());
+			    return "redirect:/autor/lista"; 
 		    }
 		
         }
+		
+		@GetMapping("/alta/{id}")
+		public String alta(@PathVariable String id) {
+			
+			try {
+				autorServicio.darAltaAutor(id);
+				return "redirect:/autor/lista";
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+				return "redirect:/autor/lista";
+			}
+		}
+		
+		@GetMapping("/eliminar/{id}")
+		public String eliminarAutor(@PathVariable String id) throws Exception {
+			
+			try {
+				autorServicio.eliminarAutor(id);
+				return "redirect:/autor/lista";
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println(e.getMessage());
+				return "redirect:/autor/lista";
+			}
+		}
+		
 }		

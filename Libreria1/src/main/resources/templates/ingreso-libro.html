@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -52,14 +53,25 @@
 			<div class="form-group">
 				<label>Ejemplares Restantes</label> <input type="text" class="form-control" name="ejemplaresRestantes" placeholder="ejemplares restantes del libro">
 			</div>
-			
-			<div class="form-group">
-				<label>Autor</label> <input type="text" class="form-control" name="nombre" placeholder="Nombre de autor">
-			</div>
-			
-			<div class="form-group">
-				<label>Editorial</label> <input type="text" class="form-control" name="nombre1" placeholder="Nombre de editorial">
-			</div>
+            
+            
+            <label class="form-label"> Autor </label>
+            <br>
+            <select name="nombre" class="form-select">
+                 <option selected>Eliga el Autor</option>
+                 <option th:each="autor : ${autores}" th:value="${autor.nombre}" th:text="${autor.nombre}"></option>
+            </select> 
+            <br> 
+            <br> 
+   
+			<label class="form-label"> Editorial </label>
+            <br>
+            <select name="nombre1" class="form-select">
+                 <option selected>Eliga la Editorial</option>
+                 <option th:each="editorial : ${editoriales}" th:value="${editorial.nombre}" th:text="${editorial.nombre}"></option>
+            </select> 
+            <br> 
+            <br> 
 
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</form>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta hhtp-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,6 +8,7 @@
     <title>Modificaion de Autor</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
 	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link>
 </head>
 <body>
 
@@ -20,7 +22,7 @@
 				<p class="card-text" th:text="${exito}"></p>
 			</div>
 		</div>
-		<div th:if="${error}!=null" class="card text-white bg-danger mb-3" >
+		<div th:if= "${error}!=null" class="card text-white bg-danger mb-3" >
 			<div class="card-body">
 				<h5 class="card-title">Error</h5>
 				<p class="card-text" th:text="${error}"></p>
@@ -29,11 +31,12 @@
 
 		<form th:action="@{/autor/modificar/__${autor.id}__}" method="POST">
 			
-			<div class="row">
-			    <div class="col">
-			        <input type="text" class="form-control" name="nombre"
-			            th:value="${autor.nombre}" required>
+			<div class="form-group">
+				<label for="formGroupExampleInput2"> Nombre</label> <input
+					type="text" class="form-control" name="nombre"
+					th:value="${autor.nombre}" required>
 			</div>
+			
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</form>
 

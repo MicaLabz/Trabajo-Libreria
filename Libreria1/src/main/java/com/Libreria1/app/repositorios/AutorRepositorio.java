@@ -13,6 +13,11 @@ import com.Libreria1.app.entidades.Autor;
 public interface AutorRepositorio extends JpaRepository<Autor, String> {
 	
 	@Query("SELECT c FROM Autor c where c.nombre = :nombre")
-	public Optional<Autor> buscarPorNombre(@Param("nombre") String nombre);
+	public Optional<Autor> buscarPorNombre1(@Param("nombre") String nombre);
 	
+	@Query("SELECT c FROM Autor c where c.nombre = :nombre")
+	public List<Autor> buscarPorNombre(@Param("nombre") String nombre);
+	
+	@Query("SELECT a from Autor a WHERE a.alta = true ")
+	public List<Autor> buscarActivos();
 }

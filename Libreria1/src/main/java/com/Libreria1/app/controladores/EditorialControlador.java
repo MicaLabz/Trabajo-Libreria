@@ -30,12 +30,13 @@ public class EditorialControlador {
 			}
 			
 			@GetMapping("/modificar/{id}")
-			public String modificar(ModelMap modelo, @PathVariable String id) {
+			public String modificar(ModelMap modelo, @PathVariable String id) throws Exception {
 				try {
 				     Editorial editorial = editorialServicio.obtenerEditorial(id);
 				     modelo.addAttribute("editorial",editorial);
 				     return "modificar-editorial";
 				}catch(Exception e) {
+					System.out.println(e.getMessage());
 					modelo.put("error", "falta algun dato");
 					return "modificar-editorial";
 				}
@@ -43,14 +44,18 @@ public class EditorialControlador {
 			
 			
 			@PostMapping("/modificar/{id}")
-			public String modificar(ModelMap modelo, @PathVariable String id, @RequestParam String nombre) {
+			public String modificar(ModelMap modelo, @PathVariable String id, @RequestParam String nombre) throws Exception {
 				try {
 				     editorialServicio.modificarEditorial(id, nombre);
+				     modelo.put("exito", "Ingreso exitoso!");
 				     return "redirect:/editorial/lista";
 				}catch(Exception e) {
-					 modelo.put("error", "Falta algun dato");
-					 return "modificar-editorial";
+					 System.out.println(e.getMessage());
+					 e.printStackTrace();
+					 System.out.println("error11");
+					 modelo.put("error", e.getMessage());
 				}
+				return "redirect:/editorial/lista";
 			}
 
 			@GetMapping("/ingreso")
@@ -65,7 +70,9 @@ public class EditorialControlador {
 				      modelo.put("exito", "Ingreso exitoso!");
 				      return "redirect:/editorial/lista";
 				}catch(Exception e) {
-					  modelo.put("error", "Falta algun dato");
+					  System.out.println(e.getMessage());
+					  System.out.println(e.getStackTrace());
+					  modelo.put("error", "Falta algun dato o no se puede ingresar una Editorial con igual nombre a otra");
 					  return "ingreso-editorial";
 				}
 			}
@@ -77,8 +84,33 @@ public class EditorialControlador {
 				     return "redirect:/editorial/lista";
 				
 			    }catch(Exception e) {
-				     return "redirect:/"; 
+			    	System.out.println(e.getMessage());
+				     return "redirect:/editorial/lista"; 
 			    }
 			
 	        }
+			
+			@GetMapping("/alta/{id}")
+			public String alta(@PathVariable String id) {
+				
+				try {
+					editorialServicio.darAltaEditorial(id);
+					return "redirect:/editorial/lista";
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
+					return "redirect:/editorial/lista";
+				}
+			}
+			
+			@GetMapping("/eliminar/{id}")
+			public String eliminarEditorial(@PathVariable String id) {
+				
+				try {
+					editorialServicio.eliminarEditorial(id);
+					return "redirect:/editorial/lista";
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
+					return "redirect:/editorial/lista";
+				}
+			}
 	}		

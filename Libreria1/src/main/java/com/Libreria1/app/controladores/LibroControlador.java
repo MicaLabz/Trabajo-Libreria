@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.Libreria1.app.entidades.Autor;
 import com.Libreria1.app.entidades.Editorial;
 import com.Libreria1.app.entidades.Libro;
+import com.Libreria1.app.repositorios.AutorRepositorio;
+import com.Libreria1.app.repositorios.EditorialRepositorio;
 import com.Libreria1.app.repositorios.LibroRepositorio;
 import com.Libreria1.app.servicios.AutorServicio;
 import com.Libreria1.app.servicios.EditorialServicio;
@@ -31,6 +33,12 @@ public class LibroControlador {
         
         @Autowired
         private EditorialServicio editorialServicio;
+        
+        @Autowired
+        private AutorRepositorio autorRepositorio;
+        
+        @Autowired
+        private EditorialRepositorio editorialRepositorio;
 	
 		@GetMapping("/lista")
 		public String lista(ModelMap modelo){
@@ -47,6 +55,10 @@ public class LibroControlador {
 			try {
 			     Libro libro = libroServicio.obtenerLibro(id);
 			     modelo.addAttribute("libro",libro);
+			     List<Autor> autores = autorRepositorio.findAll();
+				 modelo.put("autores", autores);
+				 List <Editorial> editoriales = editorialRepositorio.findAll();
+				 modelo.put("editoriales", editoriales);
 			     return "modificar-libro";
 			}catch(Exception e) {
 				modelo.put("error", "falta algun dato");
@@ -63,31 +75,47 @@ public class LibroControlador {
 				 Editorial editorial = editorialServicio.obtenerEditorialPorNombre(nombre1);
 				 String idEditorial = editorial.getId();
 				 libroServicio.modificarLibro(id, isbn, titulo, anio, ejemplares, ejemplaresPrestados, ejemplaresRestantes,/*dudas*/ idAutor, nombre, idEditorial, nombre1);
-			     return "redirect:/libro/lista";
+				 modelo.put("exito", "Ingreso exitoso!");
+				 return "redirect:/libro/lista";
 			}catch(Exception e) {
+				System.out.println(e.getMessage());
+				System.out.println(e.getStackTrace());
 				 modelo.put("error", "Falta algun dato");
 				 return "modificar-libro";
 			}
 		}
 
 		@GetMapping("/ingreso")
-		public String ingreso() {
+		public String ingreso(ModelMap modelo) {
+			List<Autor> autores = autorRepositorio.findAll();
+			modelo.put("autores", autores);
+			List <Editorial> editoriales = editorialRepositorio.findAll();
+			modelo.put("editoriales", editoriales);
 			return "ingreso-libro";
 		}
 
 		@PostMapping("/ingreso")
-		public String ingresarLibro(ModelMap modelo, @RequestParam Long isbn, @RequestParam String titulo, @RequestParam Integer anio, @RequestParam Integer ejemplares, @RequestParam Integer ejemplaresPrestados, @RequestParam Integer ejemplaresRestantes,/*dudas*/ @RequestParam String nombre, @RequestParam String nombre1) {
+		public String ingresarLibro(ModelMap modelo, @RequestParam Long isbn, @RequestParam String titulo, @RequestParam Integer anio, @RequestParam Integer ejemplares, @RequestParam Integer ejemplaresPrestados, @RequestParam Integer ejemplaresRestantes, @RequestParam String nombre, @RequestParam String nombre1) throws Exception {
 			try {
-				  Autor autor = autorServicio.obtenerAutorPorNombre(nombre);
-				  String idAutor = autor.getId();
-				  Editorial editorial = editorialServicio.obtenerEditorialPorNombre(nombre1);
-				  String idEditorial = editorial.getId();
-			      libroServicio.ingresarLibro(isbn, titulo, anio, ejemplares, ejemplaresPrestados, ejemplaresRestantes,/*dudas*/ idAutor, idEditorial);
+				  Autor aut = autorServicio.obtenerAutorPorNombre(nombre);
+				  Editorial edit = editorialServicio.obtenerEditorialPorNombre(nombre1);
+				  String idEditorial = edit.getId();
+				  String idAutor = aut.getId();
+				  libroServicio.ingresarLibro(isbn, titulo, anio, ejemplares, ejemplaresPrestados, ejemplaresRestantes, idAutor , idEditorial);
 			      modelo.put("exito", "Ingreso exitoso!");
 			      return "redirect:/libro/lista";
+				  
+				  
 			}catch(Exception e) {
+				List<Autor> autores = autorRepositorio.findAll();
+				modelo.put("autores", autores);
+				List <Editorial> editoriales = editorialRepositorio.findAll();
+				modelo.put("editoriales", editoriales);
+				System.out.println(e.fillInStackTrace());
+				System.out.println(e.getCause());
+				System.out.println(e.getStackTrace());
 				  modelo.put("error", "Falta algun dato");
-				  return "ingreso-libro";
+				  return "redirect:/libro/ingreso";
 			}
 		}
 
@@ -98,9 +126,33 @@ public class LibroControlador {
 			     return "redirect:/libro/lista";
 			
 		    }catch(Exception e) {
-			     return "redirect:/"; 
+		    	System.out.println(e.getMessage());
+			     return "redirect:/libro/lista"; 
 		    }
 		
         }
+		
+		@GetMapping("/alta/{id}")
+		public String alta(@PathVariable String id) {
+			
+			try {
+				libroServicio.darAltaLibro(id);
+				return "redirect:/libro/lista";
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+				return "redirect:/libro/lista";
+			}
+		}
+		
+		@GetMapping("/eliminar/{id}")
+		public String eliminarEditorial(@PathVariable String id) {
+			
+			try {
+				libroServicio.eliminarLibro(id);
+				return "redirect:/libro/lista";
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+				return "redirect:/libro/lista";
+			}
+		}
 }		
-

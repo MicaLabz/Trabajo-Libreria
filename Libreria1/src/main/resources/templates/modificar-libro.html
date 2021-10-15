@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta hhtp-equiv="X-UA-Compatible" content="IE=edge">
@@ -28,47 +29,59 @@
 		</div>
 
 		<form th:action="@{/libro/modificar/__${libro.id}__}" method="POST">
+
+			<div class="form-group">
+				<label for="formGroupExampleInput">ISBN</label> <input
+					type="text" class="form-control" name="isbn"
+					th:value="${libro.isbn}" required>
+			</div>
 			
-			<div class="row">
-			    <div class="col">
-			        <input type="text" class="form-control" name="isbn"
-			            th:value="${libro.isbn}" required>
+			<div class="form-group">
+				<label for="formGroupExampleInput2"> Titulo</label> <input
+					type="text" class="form-control" name="titulo"
+					th:value="${libro.titulo}" required>
 			</div>
-			<div class="row">
-			    <div class="col">
-			        <input type="text" class="form-control" name="titulo"
-			            th:value="${libro.titulo}" required>
+			
+			<div class="form-group">
+				<label for="formGroupExampleInput2"> Año</label> <input
+					type="text" class="form-control" name="anio"
+					th:value="${libro.anio}" required>
 			</div>
-			<div class="row">
-			    <div class="col">
-			        <input type="text" class="form-control" name="anio"
-			            th:value="${libro.anio}" required>
+			
+			<div class="form-group">
+				<label for="formGroupExampleInput2"> Ejemplares Totales</label> <input
+					type="text" class="form-control" name="ejemplares"
+					th:value="${libro.ejemplares}" required>
 			</div>
-			<div class="row">
-			    <div class="col">
-			        <input type="text" class="form-control" name="ejemplares"
-			            th:value="${libro.ejemplares}" required>
+			
+			<div class="form-group">
+				<label for="formGroupExampleInput2"> Ejemplares Prestados</label> <input
+					type="text" class="form-control" name="ejemplaresPrestados"
+					th:value="${libro.ejemplaresPrestados}" required>
 			</div>
-			<div class="row">
-			    <div class="col">
-			        <input type="text" class="form-control" name="ejemplaresPrestados"
-			            th:value="${libro.ejemplaresPrestados}" required>
+			
+			<div class="form-group">
+				<label for="formGroupExampleInput2"> Ejemplares Restantes</label> <input
+					type="text" class="form-control" name="ejemplaresRestantes"
+					th:value="${libro.ejemplaresRestantes}" required>
 			</div>
-			<div class="row">
-			    <div class="col">
-			        <input type="text" class="form-control" name="ejemplaresRestantes"
-			            th:value="${libro.ejemplaresRestantes}" required>
-			</div>
-			<div class="row">
-			    <div class="col">
-			        <input type="text" class="form-control" name="nombre"
-			            th:value="${libro.autor.nombre}" required>
-			</div>
-			<div class="row">
-			    <div class="col">
-			        <input type="text" class="form-control" name="nombre1"
-			            th:value="${libro.editorial.nombre}" required>
-			</div>
+			
+			<div class="form-group">
+				<label for="formGroupExampleInput2"> Autor</label> 
+				<select name="nombre" class="form-select">
+                 <option selected>Eliga el Autor</option>
+                 <option th:each="autor : ${autores}" th:value="${autor.nombre}" th:text="${autor.nombre}"></option>
+            </select> 
+			</div> 
+            
+			<div class="form-group">
+				<label for="formGroupExampleInput2"> Editorial</label> 
+				<select name="nombre1" class="form-select">
+                 <option selected>Eliga la Editorial</option>
+                 <option th:each="editorial : ${editoriales}" th:value="${editorial.nombre}" th:text="${editorial.nombre}"></option>
+            </select> 
+			</div> 
+            
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</form>
 

@@ -24,53 +24,85 @@ public class EditorialServicio {
 	@Autowired
 	private LibroRepositorio libroRepositorio;
 	
+	@Autowired
+	private LibroServicio libroServicio;
+	
 	@Transactional
-	public Editorial ingresarEditorial(String nombre) throws ErrorServicio{
-		if(nombre == null || nombre.isEmpty()) {
-			throw new ErrorServicio("Nombre de la Editorial es null");
-		}
+	public Editorial ingresarEditorial(String nombre) throws Exception{
+		if(nombre.isBlank()) {
+			throw new Exception("Nombre de la Editorial es null");
+		}else {
 			Editorial editorial = new Editorial();
 			editorial.setNombre(nombre);
 			editorial.setAlta(true);
 			
 			return editorialRepositorio.save(editorial);
+		}
 		
 	}
 	
 	@Transactional
 	public Editorial modificarEditorial(String id, String nombre) throws Exception {
 
-		Optional<Editorial> result = editorialRepositorio.findById(id);
-		if (result.isEmpty()) {
-			throw new Exception("Nombre de la Editorial es null");
-		} else {
-			Editorial editorial = result.get();
+			Editorial editorial = editorialRepositorio.getById(id);
 			editorial.setNombre(nombre);
 			return editorialRepositorio.save(editorial);
+		}
+	
+	@Transactional
+	public Editorial darBajaEditorial(String id) throws Exception {
+		Libro libro = libroRepositorio.buscarLibroPorIdEditorial(id);
+		if(libro == null) {
+			Editorial editorial = editorialRepositorio.getById(id);
+			editorial.setAlta(false);
+			return editorial;
+		}else {
+		String idLibro = libro.getId();
+		libroServicio.darBajaLibro(idLibro);
+		Editorial editorial = editorialRepositorio.getById(id);
+		editorial.setAlta(false);
+		return editorial;
 		}
 	}
 	
 	@Transactional
-	public void darBajaEditorial(String id) throws Exception {
-		Optional<Editorial> result = editorialRepositorio.findById(id);
-		Optional<Libro> result1 = libroRepositorio.buscarLibroPorIdEditorial(id);
-	       
-	    if(result.isEmpty() || result1.isEmpty()) {
-	    	throw new Exception("No se encontro");
-	    }else {
-		Editorial editorial = result.get();
-		Libro libro = result1.get();
-        editorial.setAlta(false);
-		editorialRepositorio.save(editorial);
+	public Editorial darAltaEditorial(String id) throws Exception{
+		Libro libro = libroRepositorio.buscarLibroPorIdEditorial(id);
+		if(libro == null) {
+			Editorial editorial = editorialRepositorio.getById(id);
+			editorial.setAlta(true);
+			return editorial;
+		}else {
+		String idLibro = libro.getId();
+		libroServicio.darAltaLibro(idLibro);
+		Editorial editorial = editorialRepositorio.getById(id);
+		editorial.setAlta(true);
+		return editorial;
+		}
+	}
+	
+	@Transactional
+	public void eliminarEditorial(String id) throws Exception{
+		Libro libro = libroRepositorio.buscarLibroPorIdEditorial(id);
+		if(libro == null) {
+			Editorial editorial = editorialRepositorio.getById(id);
+			editorialRepositorio.delete(editorial);
+		}else {
+		String idLibro = libro.getId();
+		libroServicio.eliminarLibro(idLibro);
+		Editorial editorial = editorialRepositorio.getById(id);
 		editorialRepositorio.delete(editorial);
-		libroRepositorio.save(libro);
-		libroRepositorio.delete(libro);
-	    }
+	}
 	}
 	
 	@Transactional
 	public List<Editorial> buscarEditoriales() {
 		return editorialRepositorio.findAll();
+	}
+	
+	@Transactional
+	public List<Editorial> listarActivos() {
+		return editorialRepositorio.buscarActivos();
 	}
 	
 	@Transactional
@@ -85,8 +117,20 @@ public class EditorialServicio {
 	}
 	}
 	
+	public List <Editorial> obtenerEditorialesPorNombre(String nombre) throws Exception {
+		Optional<List<Editorial>> result = Optional.of(editorialRepositorio.buscarPorNombre(nombre));
+	       
+	    if(result.isEmpty()) {
+	    	System.out.println("sad");
+	    	throw new Exception("No se encontro");
+	    }else {
+		List <Editorial> editoriales  = result.get();
+		return editoriales;
+	}
+	}
+	
 	public Editorial obtenerEditorialPorNombre(String nombre) throws Exception {
-		Optional<Editorial> result = editorialRepositorio.buscarPorNombre(nombre);
+		Optional<Editorial> result = editorialRepositorio.buscarPorNombre1(nombre);
 	       
 	    if(result.isEmpty()) {
 	    	throw new Exception("No se encontro");

@@ -25,10 +25,10 @@ public class AutorServicio {
 	private LibroServicio libroServicio;
 	
 	@Transactional
-	public Autor ingresarAutor(String nombre) throws ErrorServicio {
+	public Autor ingresarAutor(String nombre) throws Exception {
 		
-		if(nombre == null || nombre.isEmpty()) {
-			throw new ErrorServicio("Nombre del Autor es null");
+		if(nombre.isBlank()) {
+			throw new Exception("Nombre del Autor es null");
 		}
 			Autor autor = new Autor();
 			autor.setNombre(nombre);
@@ -40,41 +40,76 @@ public class AutorServicio {
 	
 	@Transactional
 	public Autor modificarAutor(String id, String nombre) throws Exception {
-		Optional<Autor> result = autorRepositorio.findById(id);
-		if(result.isEmpty()) {
-			throw new Exception("Nombre del Autor es null");
-		}else {
-        Autor autor = result.get();
-		autor.setNombre(nombre);
-        return autorRepositorio.save(autor);
+	    //List <Autor> autores = autorRepositorio.buscarPorNombre(nombre);
+	    //System.out.println(autores.size());
+	    //if (autores.size() > 1){
+			//throw new Exception("No puede haber 2 autores con el mismo nombre");
+		//}else {
+			Autor autor = autorRepositorio.getById(id);
+			autor.setNombre(nombre);
+	        return autorRepositorio.save(autor);
+		}
 
+	
+	
+	@Transactional
+	public Autor darBajaAutor(String id) {
+		Libro libro = libroRepositorio.buscarLibroPorIdAutor(id);
+		if(libro == null) {
+			Autor autor = autorRepositorio.getById(id);
+			autor.setAlta(false);
+			return autor;
+		}else {
+		String idLibro = libro.getId();
+		libroServicio.darBajaLibro(idLibro);
+		Autor autor = autorRepositorio.getById(id);
+		autor.setAlta(false);
+		return autor;
 		}
 	}
 	
 	
 	@Transactional
-	public void darBajaAutor(String id) throws Exception {
-		Optional<Autor> result = autorRepositorio.findById(id);
-		Optional<Libro> result1 = libroRepositorio.buscarLibroPorIdAutor(id);
-       
-	    if(result.isEmpty() || result1.isEmpty()) {
-	    	throw new Exception("No se encontro");
-	    }else {
-		Autor autor = result.get();
-		Libro libro = result1.get();
-        autor.setAlta(false);
-		autorRepositorio.save(autor);
+	public Autor darAltaAutor(String id) throws Exception{
+		Libro libro = libroRepositorio.buscarLibroPorIdAutor(id);
+		if(libro == null) {
+			Autor autor = autorRepositorio.getById(id);
+			autor.setAlta(true);
+			return autor;
+		}else {
+		String idLibro = libro.getId();
+		libroServicio.darAltaLibro(idLibro);
+		Autor autor = autorRepositorio.getById(id);
+		autor.setAlta(true);
+		return autor;
+		}
+	}
+	
+	@Transactional
+	public void eliminarAutor(String id) throws Exception{
+		Libro libro = libroRepositorio.buscarLibroPorIdAutor(id);
+		if(libro == null) {
+			Autor autor = autorRepositorio.getById(id);
+			autorRepositorio.delete(autor);
+		}else {
+		String idLibro = libro.getId();
+		libroServicio.eliminarLibro(idLibro);
+		Autor autor = autorRepositorio.getById(id);
 		autorRepositorio.delete(autor);
-		libroRepositorio.save(libro);
-		libroRepositorio.delete(libro);
-		
 	}
-	}
+}
+	
+	
 	
 	@Transactional
 	public List<Autor> buscarAutores() {
 		return autorRepositorio.findAll();
 	}
+	
+	@Transactional
+	public List<Autor> listarActivos() {
+		return autorRepositorio.buscarActivos();
+	}	
 	
 	@Transactional
 	public Autor obtenerAutor(String id) throws Exception{
@@ -88,15 +123,28 @@ public class AutorServicio {
 	}
 	}
 	    
-	public Autor obtenerAutorPorNombre(String nombre) throws Exception {
-		Optional<Autor> result = autorRepositorio.buscarPorNombre(nombre);
+	public List <Autor> obtenerAutoresPorNombre(String nombre) throws Exception {
+		Optional<List<Autor>> result = Optional.of(autorRepositorio.buscarPorNombre(nombre));
 	       
 	    if(result.isEmpty()) {
+	    	System.out.println("sad");
 	    	throw new Exception("No se encontro");
 	    }else {
-		Autor autor = result.get();
+		List <Autor> autores1  = result.get();
+		return autores1;
+	}
+	    
+}
+	
+	public Autor obtenerAutorPorNombre(String nombre) throws Exception {
+		Optional<Autor> result = autorRepositorio.buscarPorNombre1(nombre);
+	       
+	    if(result.isEmpty()) {
+	    	System.out.println("sad");
+	    	throw new Exception("No se encontro");
+	    }else {
+		Autor autor  = result.get();
 		return autor;
 	}
-	
 }
 }

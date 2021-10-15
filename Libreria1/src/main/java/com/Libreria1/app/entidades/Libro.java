@@ -1,9 +1,10 @@
 package com.Libreria1.app.entidades;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
@@ -11,7 +12,7 @@ public class Libro {
 	@Id
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid" , strategy = "uuid2")
-	public String id;
+	private String id;
 	private Long isbn;
     private String titulo;
     private Integer anio;
@@ -19,10 +20,10 @@ public class Libro {
     private Integer ejemplaresPrestados;
     private Integer ejemplaresRestantes;
     private Boolean alta;
-    @OneToOne
-    public Autor autor;
-    @OneToOne
-    public Editorial editorial;
+    @ManyToOne 
+    private Autor autor;
+    @ManyToOne
+    private Editorial editorial;
     
 	public Libro(String id, Long isbn, String titulo, Integer anio, Integer ejemplares, Integer ejemplaresPrestados,
 			Integer ejemplaresRestantes, Boolean alta, Autor autor, Editorial editorial) {
@@ -126,6 +127,6 @@ public class Libro {
 	public String toString() {
 		return "Libro [id=" + id + ", isbn=" + isbn + ", titulo=" + titulo + ", anio=" + anio + ", ejemplares="
 				+ ejemplares + ", ejemplaresPrestados=" + ejemplaresPrestados + ", ejemplaresRestantes="
-				+ ejemplaresRestantes + ", alta=" + alta + "]";
+				+ ejemplaresRestantes + ", alta=" + alta + ", Autor=" + autor + ", Editorial=" + editorial + "]";
 	}
 }

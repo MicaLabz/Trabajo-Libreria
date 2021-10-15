@@ -8,7 +8,7 @@
     <title>Listado de Libros</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
 	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous" />
 </head>
 <body>
 
@@ -25,6 +25,8 @@
 					<th scope="col">Ejemplares Totales</th>
 					<th scope="col">Ejemplares Prestados</th>
 					<th scope="col">Ejemplares Restantes</th>
+					<th scope="col">Esta activo?</th>
+					<th scope="col">Acciones</th>
 					<th scope="col">Autor</th>
 					<th scope="col">Editorial</th>
 					<th scope="col">Editar libro</th>
@@ -40,12 +42,22 @@
 					<td th:text="${libro.ejemplares}"></td>
 					<td th:text="${libro.ejemplaresPrestados}"></td>
 					<td th:text="${libro.ejemplaresRestantes}"></td>
+					<td>
+						<i th:if="${libro.alta}" class="fa fa-circle text-success"></i>
+						<i th:unless="${libro.alta}" class="fa fa-circle text-danger"></i>
+					</td>
+					<td>
+					<a th:href="@{/libro/alta/__${libro.id}__}"><i class="fa fa-arrow-up"></i></a> 
+					<a th:href="@{/libro/baja/__${libro.id}__}"><i class="fa fa-ban"></i></a>
+					</td>
 					<td th:text="${libro.autor.nombre}"></td>
 					<td th:text="${libro.editorial.nombre}"></td>
 					<td>
 					<a th:href="@{/libro/modificar/__${libro.id}__}" class="btn btn-primary" role="button" aria-pressed="true">Editar</a>
 					</td>
-					<td><a th:href="@{/libro/baja/__${libro.id}__}" class="btn btn-danger" role="button" aria-pressed="true">Dar baja</a></td>
+					<td>
+					<a th:href="@{/libro/eliminar/__${libro.id}__}"class="btn btn-danger" role="button" aria-pressed="true">Eliminar</a>
+					</td>
 				</tr>
 			</tbody>
 		</table>
