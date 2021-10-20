@@ -4,11 +4,9 @@ import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mapping.AccessOptions.SetOptions.Propagation;
 import org.springframework.stereotype.Service;
 import com.Libreria1.app.entidades.Autor;
 import com.Libreria1.app.entidades.Libro;
-import com.Libreria1.app.errores.ErrorServicio;
 import com.Libreria1.app.repositorios.AutorRepositorio;
 import com.Libreria1.app.repositorios.LibroRepositorio;
 
@@ -40,11 +38,6 @@ public class AutorServicio {
 	
 	@Transactional
 	public Autor modificarAutor(String id, String nombre) throws Exception {
-	    //List <Autor> autores = autorRepositorio.buscarPorNombre(nombre);
-	    //System.out.println(autores.size());
-	    //if (autores.size() > 1){
-			//throw new Exception("No puede haber 2 autores con el mismo nombre");
-		//}else {
 			Autor autor = autorRepositorio.getById(id);
 			autor.setNombre(nombre);
 	        return autorRepositorio.save(autor);
@@ -99,8 +92,6 @@ public class AutorServicio {
 	}
 }
 	
-	
-	
 	@Transactional
 	public List<Autor> buscarAutores() {
 		return autorRepositorio.findAll();
@@ -123,24 +114,11 @@ public class AutorServicio {
 	}
 	}
 	    
-	public List <Autor> obtenerAutoresPorNombre(String nombre) throws Exception {
-		Optional<List<Autor>> result = Optional.of(autorRepositorio.buscarPorNombre(nombre));
-	       
-	    if(result.isEmpty()) {
-	    	System.out.println("sad");
-	    	throw new Exception("No se encontro");
-	    }else {
-		List <Autor> autores1  = result.get();
-		return autores1;
-	}
-	    
-}
 	
 	public Autor obtenerAutorPorNombre(String nombre) throws Exception {
 		Optional<Autor> result = autorRepositorio.buscarPorNombre1(nombre);
 	       
 	    if(result.isEmpty()) {
-	    	System.out.println("sad");
 	    	throw new Exception("No se encontro");
 	    }else {
 		Autor autor  = result.get();

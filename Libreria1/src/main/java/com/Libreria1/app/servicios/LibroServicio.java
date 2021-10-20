@@ -4,17 +4,15 @@ import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import com.Libreria1.app.entidades.Autor;
 import com.Libreria1.app.entidades.Editorial;
 import com.Libreria1.app.entidades.Libro;
-import com.Libreria1.app.errores.ErrorServicio;
+import com.Libreria1.app.entidades.Prestamo;
 import com.Libreria1.app.repositorios.AutorRepositorio;
 import com.Libreria1.app.repositorios.EditorialRepositorio;
 import com.Libreria1.app.repositorios.LibroRepositorio;
+import com.Libreria1.app.repositorios.PrestamoRepositorio;
 
 @Service
 public class LibroServicio {
@@ -33,6 +31,12 @@ public class LibroServicio {
 	
 	@Autowired
 	private EditorialServicio editorialServicio;
+	
+	@Autowired
+	private PrestamoRepositorio prestamoRepositorio;
+	
+	@Autowired
+	private PrestamoServicio prestamoServicio;
 	
 	@Transactional
 	public Libro ingresarLibro(Long isbn, String titulo, Integer anio, Integer ejemplares, Integer ejemplaresPrestados, Integer ejemplaresRestantes, String idAutor,  String idEditorial) throws Exception {
@@ -68,7 +72,6 @@ public class LibroServicio {
 		Optional <Editorial> result = editorialRepositorio.findById(idEditorial);
 		Optional <Autor> result1 = autorRepositorio.findById(idAutor);
 		Optional<Libro> result2 = libroRepositorio.findById(id);
-		System.out.println("error");
 		if (!(result.isPresent() || result1.isPresent() || result2.isPresent())) {
 			throw new Exception("Datos no estan");
 		}else {	
@@ -109,8 +112,16 @@ public class LibroServicio {
 	
 	@Transactional
 	public void eliminarLibro(String id) throws Exception{
-          Libro libro = libroRepositorio.getById(id);
-		  libroRepositorio.delete(libro);
+		Prestamo prestamo = prestamoRepositorio.buscarPrestamoPorIdLibro(id);
+		if(prestamo == null) {
+			Libro libro  = libroRepositorio.getById(id);
+			libroRepositorio.delete(libro);
+		}else {
+		String idPrestamo = prestamo.getId();
+		prestamoServicio.eliminarPrestamo(idPrestamo);
+		Libro libro = libroRepositorio.getById(id);
+		libroRepositorio.delete(libro);
+	}
 	}
 	
 	@Transactional
@@ -135,5 +146,19 @@ public class LibroServicio {
 		return libro;
 	}
 	}
+	
+	@Transactional
+	public Libro obtenerLibroPorTitulo(String titulo) throws Exception{
+		Optional<Libro> result = libroRepositorio.buscarLibroPorTitulo(titulo);
+	       
+	    if(result.isEmpty()) {
+	    	throw new Exception("No se encontro");
+	    }else {
+		Libro libro = result.get();
+		return libro;
+	}
+	}
+	
+	
 
 }

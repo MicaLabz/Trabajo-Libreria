@@ -8,10 +8,8 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.Libreria1.app.entidades.Autor;
 import com.Libreria1.app.entidades.Editorial;
 import com.Libreria1.app.entidades.Libro;
-import com.Libreria1.app.errores.ErrorServicio;
 import com.Libreria1.app.repositorios.EditorialRepositorio;
 import com.Libreria1.app.repositorios.LibroRepositorio;
 
@@ -121,7 +119,6 @@ public class EditorialServicio {
 		Optional<List<Editorial>> result = Optional.of(editorialRepositorio.buscarPorNombre(nombre));
 	       
 	    if(result.isEmpty()) {
-	    	System.out.println("sad");
 	    	throw new Exception("No se encontro");
 	    }else {
 		List <Editorial> editoriales  = result.get();

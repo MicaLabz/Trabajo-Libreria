@@ -52,7 +52,6 @@ public class EditorialControlador {
 				}catch(Exception e) {
 					 System.out.println(e.getMessage());
 					 e.printStackTrace();
-					 System.out.println("error11");
 					 modelo.put("error", e.getMessage());
 				}
 				return "redirect:/editorial/lista";

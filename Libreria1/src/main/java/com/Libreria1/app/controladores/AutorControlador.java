@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.Libreria1.app.entidades.Autor;
 import com.Libreria1.app.servicios.AutorServicio;
-import com.Libreria1.app.servicios.LibroServicio;
 
 @Controller
 @RequestMapping("/autor")
@@ -21,9 +20,6 @@ public class AutorControlador {
 	
         @Autowired	
         private AutorServicio autorServicio;
-        
-        @Autowired
-        private LibroServicio libroServicio;
 	
 		@GetMapping("/lista")
 		public String lista(ModelMap modelo){
@@ -58,9 +54,7 @@ public class AutorControlador {
 			}catch(Exception e) {
 				 System.out.println(e.getMessage());
 				 e.printStackTrace();
-				 System.out.println("error10");
 				 modelo.addAttribute("error", e.getMessage());
-				 //throw new Exception("Falta algun dato o no puede ingresar un Autor con igual nombre a otro");
 			}
 			return "redirect:/autor/lista";
 		}

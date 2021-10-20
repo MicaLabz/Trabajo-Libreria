@@ -16,7 +16,6 @@ import com.Libreria1.app.entidades.Editorial;
 import com.Libreria1.app.entidades.Libro;
 import com.Libreria1.app.repositorios.AutorRepositorio;
 import com.Libreria1.app.repositorios.EditorialRepositorio;
-import com.Libreria1.app.repositorios.LibroRepositorio;
 import com.Libreria1.app.servicios.AutorServicio;
 import com.Libreria1.app.servicios.EditorialServicio;
 import com.Libreria1.app.servicios.LibroServicio;

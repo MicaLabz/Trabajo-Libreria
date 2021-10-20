@@ -7,13 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/")
-public class AutorPortalControlador {
+public class PrestamoPortalControlador {
 	
-	@GetMapping("/autor")
+	@GetMapping("/prestamo")
 	public String portal(ModelMap modelo){
 		
-		return "autor-portal";
+		return "prestamo-portal";
 	}
-	
 
 }
