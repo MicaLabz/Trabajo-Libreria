@@ -49,6 +49,8 @@ public class PrestamoServicio {
 		prestamo.setFechaPrestamo(fechaPrestamo);
 		prestamo.setFechaDevolucion(fechaDevolucion);
 		prestamo.setAlta(true);
+		libro.setEjemplaresPrestados(libro.getEjemplaresPrestados() + 1);
+		libro.setEjemplaresRestantes(libro.getEjemplaresRestantes() - 1);
 		prestamo.setLibro(libro);
 		prestamo.setCliente(cliente);
 		
@@ -99,17 +101,31 @@ public class PrestamoServicio {
 	@Transactional
 	public Prestamo darBajaPrestamo(String id) {
 		Prestamo prestamo = prestamoRepositorio.getById(id);
+		if(prestamo.getAlta() == false) {	
+			return prestamoRepositorio.save(prestamo);
+		}else {
 		prestamo.setAlta(false);
+		Libro libro = prestamo.getLibro();
+		libro.setEjemplaresPrestados(libro.getEjemplaresPrestados() - 1 );
+		libro.setEjemplaresRestantes(libro.getEjemplaresRestantes() + 1);
 		return prestamoRepositorio.save(prestamo);
 		
+		}
 	}
 	
 	
 	@Transactional
 	public Prestamo darAltaPrestamo(String id) throws Exception{
         Prestamo prestamo = prestamoRepositorio.getById(id);
+        if(prestamo.getAlta() == true) {	
+			return prestamoRepositorio.save(prestamo);
+		}else {
 		prestamo.setAlta(true);
+		Libro libro = prestamo.getLibro();
+		libro.setEjemplaresPrestados(libro.getEjemplaresPrestados() + 1 );
+		libro.setEjemplaresRestantes(libro.getEjemplaresRestantes() - 1);
 		return prestamoRepositorio.save(prestamo);
+		}
 	}
 	
 	@Transactional

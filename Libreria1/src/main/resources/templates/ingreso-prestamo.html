@@ -41,13 +41,13 @@
 					type="date" class="form-control" name="fechaDevolucion">
 			</div>
 			
-            <br>
             <label class="form-label"> Libro </label>
             <br>
             <select name="tituloLibro" class="form-select">
                  <option selected>Eliga el Libro</option>
                  <option th:each="libro : ${libros}" th:value="${libro.titulo}" th:text="${libro.titulo}"></option>
             </select> 
+            <br>
             <br> 
            
    

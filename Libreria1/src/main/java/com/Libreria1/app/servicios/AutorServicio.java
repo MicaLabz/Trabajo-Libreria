@@ -43,8 +43,6 @@ public class AutorServicio {
 	        return autorRepositorio.save(autor);
 		}
 
-	
-	
 	@Transactional
 	public Autor darBajaAutor(String id) {
 		Libro libro = libroRepositorio.buscarLibroPorIdAutor(id);
