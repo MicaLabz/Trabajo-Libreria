@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Pagina Principal</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+
+</head>
+<body>
+	<div th:insert="fragments/header :: header"></div>
+
+	<div class="container">
+		<form action="/logincheck" method="POST">
+
+			<div th:if="${error}!=null" class="card text-white bg-danger mb-3">
+				<div class="card-body">
+					<h5 class="card-title">Error</h5>
+					<p class="card-text" th:text="${error}"></p>
+				</div>
+			</div>
+
+			<input type="text" name="documento" placeholder="DNI" /> 
+			<input type="password" name="clave" placeholder="Contraseña" />
+			<button type="submit">Entrar</button>
+		</form>
+	</div>
+</body>
+
+</html>

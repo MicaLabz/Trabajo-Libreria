@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.Libreria1.app.entidades.Autor;
 import com.Libreria1.app.entidades.Cliente;
 import com.Libreria1.app.servicios.ClienteServicio;
 
@@ -59,6 +58,10 @@ public class ClienteControlador {
 		}
 		return "redirect:/cliente/lista";
 	}
+	@GetMapping("/login")
+	public String login() {
+		return "login";
+	}
 
 	@GetMapping("/ingreso")
 	public String ingreso() {
@@ -66,9 +69,9 @@ public class ClienteControlador {
 	}
 
 	@PostMapping("/ingreso")
-	public String ingresarCliente(ModelMap modelo, @RequestParam Long documento, String nombre, String apellido, String telefono) throws Exception  {
+	public String ingresarCliente(ModelMap modelo, @RequestParam Long documento, @RequestParam String nombre, @RequestParam String apellido, @RequestParam String telefono,@RequestParam String clave) throws Exception  {
 		try {
-		      clienteServicio.ingresarCliente(documento,nombre, apellido, telefono);
+		      clienteServicio.ingresarCliente(documento,nombre, apellido, telefono, clave);
 		      modelo.put("exito", "Ingreso exitoso!");
 		      return "redirect:/cliente/lista";
 		}catch(Exception e) {

@@ -1,0 +1,13 @@
+body{
+	background-color: orange;
+}
+h1{
+	color: aqua;
+}
+
+.container m-5{
+	background-color: rgb(255, 122, 89);
+}
+.form-group{
+	background-color: fuchsia;
+}

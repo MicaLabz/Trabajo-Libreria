@@ -9,9 +9,9 @@
 	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link>
 </head>
-<body>
+<body style = "background-color: maroon;">
 
-    <h1>ACA INGRESA UNA EDITORIAL NUEVA</h1>
+    <h1 style = "background-color: red;"><b>ACA INGRESA UNA EDITORIAL NUEVA</b></h1>
     
     <div class="container m-5">
 
@@ -30,7 +30,7 @@
 
 		<form th:action="@{/editorial/ingreso}" method="POST">
 			<div class="form-group">
-				<label>Nombre</label> <input type="text" class="form-control" name="nombre1" placeholder="Nombre de Editorial">
+				<label class = "text-white"><b>Nombre</b></label> <input type="text" class="form-control" name="nombre1" placeholder="Nombre de Editorial">
 			</div>
 
 			<button type="submit" class="btn btn-primary">Submit</button>

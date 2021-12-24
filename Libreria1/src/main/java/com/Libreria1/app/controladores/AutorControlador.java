@@ -3,6 +3,7 @@ package com.Libreria1.app.controladores;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import com.Libreria1.app.entidades.Autor;
 import com.Libreria1.app.servicios.AutorServicio;
 
 @Controller
+@PreAuthorize("isAuthenticated()")
 @RequestMapping("/autor")
 public class AutorControlador {
 	
@@ -58,12 +60,14 @@ public class AutorControlador {
 			}
 			return "redirect:/autor/lista";
 		}
-
+		
+        @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 		@GetMapping("/ingreso")
 		public String ingreso() {
 			return "ingreso-autor";
 		}
 
+        @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 		@PostMapping("/ingreso")
 		public String ingresarAutor(ModelMap modelo, @RequestParam String nombre) throws Exception  {
 			try {
